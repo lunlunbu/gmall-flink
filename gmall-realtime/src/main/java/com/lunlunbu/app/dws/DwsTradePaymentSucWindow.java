@@ -1,3 +1,5 @@
+package com.lunlunbu.app.dws;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.lunlunbu.bean.TradePaymentWindowBean;
@@ -26,7 +28,8 @@ import org.apache.flink.util.Collector;
 
 import java.time.Duration;
 
-public class FlinkCDCTest {
+public class DwsTradePaymentSucWindow {
+
     public static void main(String[] args) throws Exception {
         //TODO 1.获取执行环境
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
@@ -165,6 +168,7 @@ public class FlinkCDCTest {
             }
         });
 
+
         //TODO 9.开窗聚合
         SingleOutputStreamOperator<TradePaymentWindowBean> resultDS = tradePaymentDS.windowAll(TumblingEventTimeWindows.of(Time.seconds(10)))
                 .reduce(new ReduceFunction<TradePaymentWindowBean>() {
@@ -193,5 +197,6 @@ public class FlinkCDCTest {
 
         //TODO 11.执行任务
         env.execute("DwsTradePaymentSucWindow");
+
     }
 }
